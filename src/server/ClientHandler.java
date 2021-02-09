@@ -4,8 +4,10 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Objects;
-import java.util.Scanner;
+import java.util.stream.Stream;
 
 public class ClientHandler {
 
@@ -27,11 +29,6 @@ public class ClientHandler {
             throw new RuntimeException("SWW", e);
         }
     }
-
-        public String getName() {
-            return name;
-        }
-
         private void doListen() {
             new Thread(() -> {
                 try {
@@ -50,17 +47,17 @@ public class ClientHandler {
                     String credentials = in.readUTF();
                     /**
                      * Input credentials sample
-                     * "-auth n1@mail.com 1"
+                     * "-auth user 1"
                      */
                     if (credentials.startsWith("-auth")) {
                         /**
                          * After splitting sample
-                         * array of ["-auth", "n1@mail.com", "1"]
+                         * array of ["-auth", "user", "1"]
                          */
-                            String authValues = "-auth n1@mail.com 1";
+                            String authValues = "-auth user 1";
                             if(credentials.equals(authValues)){
-                                name = "n1";
-                                System.out.println("Auth ok" + name);
+                                name = "User";
+                                System.out.println(name +" auth ok");
                                 sendMessage("Auth ok");
                                 return;
                             }
@@ -76,30 +73,38 @@ public class ClientHandler {
 
         }
         private void commands(){
-            sendMessage("Введите номер команды или для просмотра команд введите 0");
+            sendMessage(" 1 - Отправка файла\n 2 - Скачивание файла\n 3 - Удаление файла\n 4 - Переименование файла");
             try {
+                Stream<Path> stream;
+                stream = Files.walk(Path.of("C:\\Storage_v1\\src\\file\\"));
+                sendMessage("Содержимое вашего хранилища:");
+                stream.forEach(x -> sendMessage(String.valueOf(x)));
                 String message = in.readUTF();
-                if(Integer.parseInt(message) ==0){
-                    sendMessage(" 1 - Отправка файла\n 2 - Скачивание файла\n 3 - Удаление файла\n 4 - Переименование файла");
-                }
+                String close = "close";
+                int number = Integer.parseInt(message);
+                Commands com = new Commands();
+                    if (number == 1) {
+                        System.out.println("1");
+                    } else if (number == 2) {
+                        System.out.println("2");
+                    } else if (number == 3) {
+                        sendMessage("Введите название файла:");
+                        String nameFile = in.readUTF();
+                        com.deleteFile(nameFile);
+                    } else if (number == 4) {
+                        sendMessage("Введите название файла и на что хотите его переименовать через пробел:");
+                        String nameAndRenameFile = in.readUTF();
+                        String[] mas = nameAndRenameFile.split("\\s");
+                        String nameFile = mas[0];
+                        String renameFile = mas[1];
+                        com.renameFile(nameFile, renameFile);
+                    }
+
             } catch (IOException e) {
                 throw new RuntimeException("SWW", e);
             }
 
         }
-//
-//        private void receiveMessage() {
-//            try {
-//                while (true) {
-//                    String message =name + ":" + in.readUTF();
-//                    server.broadcastMessage(message);
-//                }
-//            }
-//            catch (IOException e) {
-//                throw new RuntimeException("SWW", e);
-//            }
-//        }
-
 
         public void sendMessage(String message) {
             try {
@@ -108,24 +113,6 @@ public class ClientHandler {
                 throw new RuntimeException("SWW", e);
             }
         }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            ClientHandler that = (ClientHandler) o;
-            return Objects.equals(server, that.server) &&
-                    Objects.equals(socket, that.socket) &&
-                    Objects.equals(in, that.in) &&
-                    Objects.equals(out, that.out) &&
-                    Objects.equals(name, that.name);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(server, socket, in, out, name);
-        }
-
 
 
 
