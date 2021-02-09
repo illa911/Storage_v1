@@ -1,4 +1,4 @@
-package app;
+package client;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -9,7 +9,7 @@ import java.util.Scanner;
 public class Client_app {
     public static void main(String[] args) {
         try {
-            Socket socket = new Socket("localhost", 8811);
+            Socket socket = new Socket("localhost", 8812);
             DataInputStream in = new DataInputStream(socket.getInputStream());
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
 
