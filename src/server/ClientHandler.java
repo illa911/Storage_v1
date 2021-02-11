@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 public class ClientHandler {
@@ -72,21 +71,31 @@ public class ClientHandler {
             }
 
         }
-        private void commands(){
-            sendMessage(" 1 - Отправка файла\n 2 - Скачивание файла\n 3 - Удаление файла\n 4 - Переименование файла");
+        private  void walkFile() {
+            Stream<Path> stream;
             try {
-                Stream<Path> stream;
                 stream = Files.walk(Path.of("C:\\Storage_v1\\src\\file\\"));
                 sendMessage("Содержимое вашего хранилища:");
                 stream.forEach(x -> sendMessage(String.valueOf(x)));
+            } catch (IOException e) {
+                throw new RuntimeException("SWW", e);
+            }
+
+        }
+        private void commands(){
+            sendMessage(" 1 - Отправка файла(Пока недоделано)\n 2 - Скачивание файла\n 3 - Удаление файла\n 4 - Переименование файла");
+            try {
                 String message = in.readUTF();
                 String close = "close";
+                walkFile();
                 int number = Integer.parseInt(message);
                 Commands com = new Commands();
                     if (number == 1) {
-                        System.out.println("1");
+                        sendMessage("Введите путь к файлу который надо загрузить на сервер:");
+                        com.loadingFile(in.readUTF());
                     } else if (number == 2) {
-                        System.out.println("2");
+                        sendMessage("Напишите название файла который хотите загрузить:");
+                       com.downloadingFile(in.readUTF());
                     } else if (number == 3) {
                         sendMessage("Введите название файла:");
                         String nameFile = in.readUTF();
@@ -98,6 +107,7 @@ public class ClientHandler {
                         String nameFile = mas[0];
                         String renameFile = mas[1];
                         com.renameFile(nameFile, renameFile);
+                        walkFile();
                     }
 
             } catch (IOException e) {

@@ -9,7 +9,7 @@ public class Server_Storage implements Server {
     public Server_Storage() {
         try {
             System.out.println("Server is starting up...");
-            ServerSocket serverSocket = new ServerSocket(8812);
+            ServerSocket serverSocket = new ServerSocket(8814);
             System.out.println("Server is started up...");
             while (true) {
                 System.out.println("Server is listening for clients...");
