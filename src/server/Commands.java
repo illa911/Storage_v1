@@ -52,7 +52,6 @@ public class Commands {
         try {
             Files.delete(path);
         } catch (IOException e) {
-            // Не удалось удалить файл
             e.printStackTrace();
         }
         System.out.println("File delete: "+nameFile);
@@ -81,8 +80,6 @@ public class Commands {
                 @Override
                 public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
                     String fileString = file.toAbsolutePath().toString();
-                    //System.out.println("pathString = " + fileString);
-
                     if(fileString.endsWith(fileToFind)){
                         System.out.println("Файл найден: " + file.toAbsolutePath());
                         return FileVisitResult.TERMINATE;

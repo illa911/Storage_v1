@@ -5,7 +5,6 @@ import java.net.Socket;
 
 public class Server_Storage implements Server {
 
-
     public Server_Storage() {
         try {
             System.out.println("Server is starting up...");

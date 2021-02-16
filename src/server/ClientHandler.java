@@ -1,5 +1,7 @@
 package server;
 
+import client.Client_app;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -83,7 +85,7 @@ public class ClientHandler {
 
         }
         private void commands(){
-            sendMessage(" 1 - Отправка файла(Пока недоделано)\n 2 - Скачивание файла\n 3 - Удаление файла\n 4 - Переименование файла");
+            sendMessage(" 1 - Отправка файла(Пока недоделано)\n 2 - Скачивание файла\n 3 - Удаление файла\n 4 - Переименование файла\n close - закрыть");
             walkFile();
             try {
                 String message = in.readUTF();
@@ -108,7 +110,10 @@ public class ClientHandler {
                         String nameFile = mas[0];
                         String renameFile = mas[1];
                         com.renameFile(nameFile, renameFile);
-                    }
+                    } else if (message.equals(close)) {
+                        Client_app client_app = new Client_app();
+                        client_app.exit();
+                }
 
             } catch (IOException e) {
                 throw new RuntimeException("SWW", e);
