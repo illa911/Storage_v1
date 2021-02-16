@@ -1,7 +1,6 @@
 package server;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
@@ -11,8 +10,8 @@ import java.nio.file.attribute.BasicFileAttributes;
 
 
 public class Commands {
-    private String filePath = "C:\\Storage_v1\\src\\file\\"; // Для проверки можно указать свой путь к файлам, так же если меняется путь то надо поменять в ClientHandler
-    private String dounloadPath = "C:\\Users\\Loki\\Downloads\\"; //Путь куда загружается файл
+    private String filePath = "src\\file\\"; // Для проверки можно указать свой путь к файлам, так же если меняется путь то надо поменять в ClientHandler
+    private String dounloadPath = "C:\\Users\\Downloads\\"; //Путь куда загружается файл
 
     public void loadingFile(String nameFile) throws IOException {
         RandomAccessFile aFile = new RandomAccessFile(nameFile, "rw");
@@ -56,11 +55,7 @@ public class Commands {
             // Не удалось удалить файл
             e.printStackTrace();
         }
-
-//        Files.delete(Path.of(filePath+nameFile));
         System.out.println("File delete: "+nameFile);
-
-        // Еще добавлю исключения
     }
 
     public void renameFile(String nameFile, String renameFile) {

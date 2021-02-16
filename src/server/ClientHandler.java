@@ -74,7 +74,7 @@ public class ClientHandler {
         private  void walkFile() {
             Stream<Path> stream;
             try {
-                stream = Files.walk(Path.of("C:\\Storage_v1\\src\\file\\"));
+                stream = Files.walk(Path.of("src\\file\\"));
                 sendMessage("Содержимое вашего хранилища:");
                 stream.forEach(x -> sendMessage(String.valueOf(x)));
             } catch (IOException e) {
@@ -84,6 +84,7 @@ public class ClientHandler {
         }
         private void commands(){
             sendMessage(" 1 - Отправка файла(Пока недоделано)\n 2 - Скачивание файла\n 3 - Удаление файла\n 4 - Переименование файла");
+            walkFile();
             try {
                 String message = in.readUTF();
                 String close = "close";
@@ -107,7 +108,6 @@ public class ClientHandler {
                         String nameFile = mas[0];
                         String renameFile = mas[1];
                         com.renameFile(nameFile, renameFile);
-                        walkFile();
                     }
 
             } catch (IOException e) {
